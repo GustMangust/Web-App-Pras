@@ -1,0 +1,113 @@
+﻿
+<!DOCTYPE html>
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CourceProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/chapter-details.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    @section Scripts{
+
+    }
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light  box-shadow mb-3">
+            <div class="container header-container">
+
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="navbar-brand nav-link" asp-area="" asp-controller="Fanfic" asp-action="AllFanfics">FanficHouse</a>
+                        </li>
+                        @if(User.Identity.IsAuthenticated) {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Fanfic" asp-action="AllFanfics">@Localizer["Fanfics"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Fanfic" asp-action="AddFanfic">@Localizer["CreateFan"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Fanfic" asp-action="UserBookmarks">@Localizer["Favourites"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserSettings">@Localizer["Account"]</a>
+                            </li>
+
+                            @if(User.IsInRole("Admin")) {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPage">@Localizer["Admin panel"]</a>
+                                </li>
+                            }
+
+                        } else {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Fanfic" asp-action="AllFanfics">@Localizer["Fanfics"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@Localizer["Register"]</a>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container body-container">
+        <div class="row justify-content-center">
+            @if(User.Identity.IsAuthenticated) {
+                <form method="post" class="col-auto search-form">
+                    <input class="search-input" name="text" />
+                    <button type="submit" asp-action="Search" asp-controller="Fanfic" class="search-button">
+                        <span class="loope material-icons">
+                            search
+                        </span>
+                    </button>
+                </form>
+            }
+        </div>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    @RenderSection("Scripts", required: false)
+    <script src="Scripts/jquery-3.6.0.js"></script>
+    <script src="Scripts/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.search-button').attr('disabled', 'disabled');
+            $(".search-input").on("input", function () {
+                if (!$(".search-input").val().trimLeft()) {
+                    $('.search-button').attr('disabled', 'disabled');
+                } else {
+                    $('.search-button').removeAttr('disabled');
+
+                }
+            });
+        });
+    </script>
+</body>
+</html>

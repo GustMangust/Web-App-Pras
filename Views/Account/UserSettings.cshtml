@@ -1,0 +1,66 @@
+﻿@model Fandom
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link type="text/css" rel="stylesheet" href="~/css/all-fanfics.css" />
+    <link type="text/css" rel="stylesheet" href="~/css/add-fanfic.css" />
+</head>
+<div class="row justify-content-md-center" style="margin-top:40px">
+
+    <div class="fanfic-block col-md-auto">
+            
+            <div class="card" style="margin: 0 auto;">
+                <div class="card-body">
+                    <div class="card-title" style="font-family:'Roboto';">
+                        @await Html.PartialAsync("_SelectLanguagePartial")
+                        <form method="post">
+                            <h5></h5>
+                            <h5>
+                                @Localizer["Email"]: @ViewBag.User.Email
+                            </h5>
+                            <div style="display:flex;">
+                                <h5>@Localizer["Username"]: <input value="@ViewBag.User.UserName" name="username" /></h5>
+                                <input type="hidden" name="userId" value="@ViewBag.User.Id" />
+                                <button type="submit" asp-controller="Account" class="material-icons add-fanfic button-hover" style="float:none; margin-bottom:7px;" asp-action="EditUsername">edit</button>
+                            </div>
+                        </form>
+                        <div>
+                            <a class="material-icons nav-link" style="float:none; margin:10px 0; font-size:20px; padding:0;" asp-controller="Fanfic" asp-action="UserFanfics">@Localizer["My fanfics"]</a>
+                            <a class="material-icons button-hover" style="float:none; padding:0;" asp-controller="Account" asp-action="Logout">logout</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                @if(!User.IsInRole("Admin")) {
+                    <div style="margin: 0 auto;">
+
+                        <h2>@Localizer["My preferences"] <a asp-controller="Account" class="material-icons add-fanfic" style="float:none;" asp-action="SetPreferences">edit</a></h2>
+                        <div>
+                            @foreach(Preference p in ViewBag.preferences) {
+
+                                @foreach(Fandom fandom in ViewBag.fandoms) {
+                                    if(fandom.Id == p.FandomId) {
+                                        <div class="card" style="width: 300px">
+                                            <div class="card-body">
+                                                <h4 class="card-title">
+                                                    @fandom.Name
+                                                    <input type="hidden" value="@p.Id" name="preferenceId" />
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+                }
+            </div>
+</div>

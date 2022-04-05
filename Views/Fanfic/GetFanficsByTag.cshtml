@@ -1,0 +1,30 @@
+﻿@model (List<Fanfic> fanfics, List<Fandom> fandoms)
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+<head>
+    <link type="text/css" rel="stylesheet" href="~/css/all-fanfics.css" media="all" />
+    @section Scripts{
+        <script src="Scripts/jquery-3.6.0.js"></script>
+        <script src="Scripts/jquery-3.6.0.min.js"></script>
+        <script src="~/js/script.js">
+
+
+                        //a.innerHTML = '';
+        </script>
+    }
+</head>
+<div class="row justify-content-md-center" style="margin-top:40px">
+
+    <div class="col-md-auto">
+        @foreach(Fanfic f in Model.fanfics) {
+            <div class="card" style="width: 36rem;">
+                <div class="card-body">
+                    <h4 class="card-title">@f.Title</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">@Model.fandoms.FirstOrDefault(x => x.Id == f.Fandom_Id).Name</h6>
+                    <div class="card-text"><div class="fanfic-description">@f.Description</div> <a asp-controller="Fanfic" class="card-link" asp-action="FanficDetails" asp-route-id="@f.Id">@Localizer["More"]</a></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

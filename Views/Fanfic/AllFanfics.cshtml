@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+    <head>
+        <link type="text/css" rel="stylesheet" href="~/css/all-fanfics.css" />
+        @section Scripts{
+            <script src="Scripts/jquery-3.6.0.js"></script>
+            <script src="Scripts/jquery-3.6.0.min.js"></script>
+            <script src="~/js/script.js">
+                
+                
+                //a.innerHTML = '';
+            </script>
+        }
+    </head>
+    @{
+        Dictionary<Fanfic, Decimal> dict = new Dictionary<Fanfic, decimal>(ViewBag.Fanfics);
+        List<Fandom> fandoms = ViewBag.Fandoms;
+    }
+    <div class="row justify-content-md-center">
+
+        <div class="fanfic-block col-md-auto">
+            <h2>
+                @Localizer["Tags"]
+            </h2>
+            <div class="tag-block" style="width:30%; display: flex; flex-wrap:wrap; margin: 0 auto; align-items:center;">
+
+                @foreach(KeyValuePair<Tag, string> tag in ViewBag.Tags) {
+                    <a asp-action="GetFanficsByTag" asp-controller="Fanfic" class="nav-link @tag.Value" style="float:none; margin:10px 0; font-size:20px; padding:0;" asp-route-tagId="@tag.Key.Id">@tag.Key.Name</a>
+                }
+            </div>
+
+            <h2>@Localizer["TopRating"]</h2>
+            @foreach(KeyValuePair<Fanfic, decimal> f in dict.OrderByDescending(x => x.Value).Take(5).ToList()) {
+                <div class="card" style="width: 36rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">@f.Key.Title<div class="rating">@f.Value<span class="material-icons star-rate">star_rate</span></div></h4>
+                        <h6 class="card-subtitle mb-2 text-muted">@fandoms.FirstOrDefault(x => x.Id == f.Key.Fandom_Id).Name</h6>
+                        <div class="card-text"><div class="fanfic-description">@f.Key.Description</div> <a asp-controller="Fanfic" class="card-link" asp-action="FanficDetails" asp-route-id="@f.Key.Id">@Localizer["More"]</a></div>
+                    </div>
+                </div>
+            }
+            <h2>@Localizer["TopUpdated"]</h2>
+            @foreach(KeyValuePair<Fanfic, decimal> f in dict.OrderByDescending(x => x.Key.UpdateDate).Take(5).ToList()) {
+                <div class="card" style="width: 36rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">@f.Key.Title<div class="rating">@f.Value<span class="material-icons star-rate">star_rate</span></div></h4>
+                        <h6 class="card-subtitle mb-2 text-muted">@fandoms.FirstOrDefault(x => x.Id == f.Key.Fandom_Id).Name</h6>
+                        <div class="card-text"><div class="fanfic-description">@f.Key.Description</div> <a asp-controller="Fanfic" class="card-link" asp-action="FanficDetails" asp-route-id="@f.Key.Id">@Localizer["More"]</a></div>
+                    </div>
+                </div>
+            }
+        <h2>@Localizer["AllFanfics"]</h2>
+            @foreach(KeyValuePair<Fanfic, decimal> f in dict) {
+                <div class="card" style="width: 36rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">@f.Key.Title<div class="rating">@f.Value<span class="material-icons star-rate">star_rate</span></div></h4>
+                        <h6 class="card-subtitle mb-2 text-muted">@fandoms.FirstOrDefault(x => x.Id == f.Key.Fandom_Id).Name</h6>
+                        <div class="card-text"><div class="fanfic-description">@f.Key.Description</div> <a asp-controller="Fanfic" class="card-link" asp-action="FanficDetails" asp-route-id="@f.Key.Id">@Localizer["More"]</a></div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+        
